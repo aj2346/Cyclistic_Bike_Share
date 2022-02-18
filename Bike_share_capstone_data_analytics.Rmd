@@ -1,0 +1,506 @@
+---
+title: "Bike_Share_Capstone_Project"
+author: "Alyssa Gessleman"
+date: "2/7/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+# **Project Information**:
+[https://www.coursera.org/learn/google-data-analytics-capstone/supplement/7PGIT/case-study-1-how-does-a-bike-share-navigate-speedy-success#:~:text=Google%20Data%20Analytics%20Capstone%3A%20Complete%20a%20Case%20Study]
+
+![](bike-share company in Chicago)
+
+## **Capstone Project, Course 8 (Coursera)**
+### *Google Data Analytics Professional Certifcate*
+
+## **Project Background**:
+
+* *Company*= **Cyclistic**, 
+a bike-share company in Chicago, IL (fictional)
+
+* *Stakeholders/Company Information* =
+  *Cyclistic Background*: 
+  -A bike-share program launched in 2016 that features more than     5,800 bicycles and 600 docking stations.   
+  -The bikes can be unlocked from one station and
+      returned to any other station in the system anytime
+  -Cyclistic sets itself apart by also offering reclining bikes,        hand tricycles, and cargo bikes, making bike-share more             inclusive to people with disabilities and riders who can’t         use a standard two-wheeled bike. 
+  -The majority of riders opt for traditional bikes; about
+      8% of riders use the assistive options. 
+  -Cyclistic users are more likely to ride for leisure, but about        30% use them to commute to work each day.
+  *Stakeholders*
+  ● Lily Moreno: The director of marketing and your manager.        Moreno is responsible for the development of campaigns
+  and initiatives to promote the bike-share program. These may      include email, social media, and other channels.
+  ● Cyclistic marketing analytics team: A team of data analysts     who are responsible for collecting, analyzing, and
+  reporting data that helps guide Cyclistic marketing strategy. 
+  ● Cyclistic executive team: The notoriously detail-oriented       executive team will decide whether to approve the
+  recommended marketing program.
+  
+* *Ask*
+Three questions will guide the future marketing program:
+1. How do annual members and casual riders use Cyclistic bikes differently?
+2. Why would casual riders buy Cyclistic annual memberships?
+3. How can Cyclistic use digital media to influence casual riders to become members?
+  * *Business Task*= 
+  To maximize the number of annual memberships by increasing the    conversion of casual riders into annual members.
+  * *Capstone Project Objectives*=  
+     * Use the provided 12 month set of historical bike trip data         to understand how *casual* (Customers who purchase                single-ride or full-day passes) riders and *annual*               (Customers who purchase annual memberships) riders **use          Cyclistic bikes differently** (*answer question #1*) 
+    * Provide **recommendations** towards the design of a new             marketing strategy as Cyclistic's finance analysts have           determined that annual members are much more profitable           than casual riders.
+
+# Data Source:
+  ## Link to Datasets=
+  [https://divvy-tripdata.s3.amazonaws.com/index.html]
+  *(Note: The datasets have a different name because Cyclistic is     a fictional company. For the purposes of this case study,
+    the datasets are appropriate and will enable you to answer the     business questions. The data has been made available by
+    Motivate International Inc. under this license)*
+
+# **Process**:
+*  *Data Import*
+    *12 zip files downloaded to computer*:
+    ![Computer_image](https://cdn.pixabay.com/photo/2016/10/15/13/40/laptop-1742462__340.jpg)
+
+    *from*: [https://divvy-tripdata.s3.amazonaws.com/index.html]
+        (link to datasets)
+
+* *12 files opened and save in csv format to desktop*:
+    ![Computer_file](https://cdn.pixabay.com/photo/2013/07/12/15/48/directory-150354__480.png)
+Capstone_Project_Data_Analytics
+
+* *12 files uploaded to R.app and converted to R format for upload(files too large to upload directly to RStudio)*:
+  ![R.app](https://www.r-project.org/logo/Rlogo.png)
+* *12 files imported to RStudio*:
+    ![RStudio](https://www.rstudio.com/wp-content/uploads/2018/10/RStudio-Logo.png)
+
+## **Set up environment in RStudio**
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+``` 
+
+```{r, install packages and load libraries}
+install.packages("tidyverse")
+library("tidyverse")
+install.packages("janitor")
+library("janitor")
+install.packages("lubridate")
+library("lubridate")
+install.packages("scales")
+library("scales")
+install.packages("ggmap")
+library("ggmap")
+install.packages("data.table")
+library("data.table")
+install.packages("ggplot2")
+library("ggplot2")
+install.packages("esquisse")
+library("esquisse")
+install.packages("magrittr")
+library(magrittr)
+install.packages("forecast")
+library("forecast")
+install.packages("mapproj")
+library("mapproj")
+install.packages("devtools")
+library("devtools")
+install.packages("extrafont")
+library("extrafont")
+install.packages("ggthemes")
+library("ggthemes")
+```
+```{r, load datasets and covert to data frames}
+
+`1` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202101-divvy-tripdata.csv")
+View(`1`)
+`2` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202102-divvy-tripdata.csv")
+View(`2`)
+`3` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202103-divvy-tripdata.csv")
+View(`3`)
+`4` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202004-divvy-tripdata.csv")
+View(`4`)
+`5` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202005-divvy-tripdata.csv")
+View(`5`)
+`6` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202006-divvy-tripdata.csv")
+View(`6`)
+`7` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202007-divvy-tripdata.csv")
+View(`7`)
+`8` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202008-divvy-tripdata.csv")
+View(`8`)
+`9` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202009-divvy-tripdata.csv")
+View(`9`)
+`10` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202010-divvy-tripdata.csv")
+View(`10`)
+`11` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202011-divvy-tripdata.csv")
+View(`11`)
+`12` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202012-divvy-tripdata.csv")
+View(`12`)
+```
+
+###Create combined data frame- combine the (12) separate tables into (1) data frame
+```{r, combine into one data frame}
+bike_rides <- rbind(`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`10`,`11`,`12`)
+```
+###check dimensions of new data frame to verify that data combined successfully
+```{r,view combined data frame}
+dim(bike_rides)
+```   
+#### *Result* [1] 3489748      13
+ 
+###remove_empty - check for empty rows/columns:
+```{r,check for empty rows/columns}
+bike_rides <- janitor::remove_empty(bike_rides, which = c("cols"))
+bike_rides <- janitor::remove_empty(bike_rides, which = c("rows"))
+####Result:no completely empty rows or columns present
+```
+ ###*Remove duplicate rows*:
+```{r,remove duplicates}
+bike_rides2 <- bike_rides[!duplicated(bike_rides$ride_id), ]
+print(paste("Removed", nrow(bike_rides) - nrow(bike_rides2), "duplicated rows"))
+```
+####Result:
+[1] "Removed 209 duplicated rows"
+
+###Re-check dimensions:
+```{r,data frame dimensions}
+dim(bike_rides2)
+glimpse(bike_rides2)
+```
+###*Remove empty* cells(missing station id,ride id,rider type,starting station, ending station, & starting/end lat,long):
+```{r,remove empty cells}
+na.omit(bike_rides2)
+print.function(na.omit(bike_rides2))
+```
+####Result:
+[ reached 'max' / getOption("max.print") -- omitted 3354438 rows ]
+ 
+###*Parsing/date&time*:
+```{r,Parsing Date&Time}
+bike_rides2$started_at <- as.POSIXct(bike_rides2$started_at, tz = "US/Eastern","%Y-%m-%d %H:%M:%S")
+bike_rides2$ended_at <- as.POSIXct(bike_rides2$ended_at, tz = "US/Eastern", "%Y-%m-%d %H:%M:%S")
+```
+####check columms:
+```{r,column check}
+str(bike_rides2)
+
+```
+
+###*Separate month/year*:
+```{r,separate month & year}
+bike_rides2 <- bike_rides2 %>%
+mutate(year_month = paste(strftime(bike_rides2$started_at, "%Y"), "-",    strftime(bike_rides2$started_at, "%m"),           paste("(",strftime(bike_rides2$started_at, "%b"), ")", sep = "")))
+unique(bike_rides2$year_month)
+```
+####Result:
+[1] "2021 - 01 (Jan)"
+ [2] "2020 - 12 (Dec)"
+ [3] "2021 - 02 (Feb)"
+ [4] "2021 - 03 (Mar)"
+ [5] "2020 - 04 (Apr)"
+ [6] "2020 - 03 (Mar)"
+ [7] "2020 - 05 (May)"
+ [8] "2020 - 06 (Jun)"
+ [9] "2020 - 07 (Jul)"
+[10] "2020 - 08 (Aug)"
+[11] "2020 - 09 (Sep)"
+[12] "2020 - 10 (Oct)"
+[13] "2020 - 11 (Nov)"
+
+###*Check data frame*:
+```{r,check}
+head(bike_rides2)
+```
+###*Separate weekdays/weekends*:
+```{r,weekdays/weekends}
+bike_rides2 <- bike_rides2 %>%
+mutate(weekday = paste(strftime(bike_rides2$ended_at, "%u"), "-", strftime(bike_rides2$ended_at, "%a"))) 
+unique(bike_rides2$weekday)
+```
+####Result:
+[1] "6 - Sat" "3 - Wed"
+[3] "4 - Thu" "1 - Mon"
+[5] "7 - Sun" "5 - Fri"
+[7] "2 - Tue"
+
+###*Starting Times*:
+```{r,start_hour}
+bike_rides2 <- bike_rides2 %>% mutate(start_hour = strftime(bike_rides2$ended_at, "%H"))
+unique(bike_rides2$start_hour)
+```
+####Result:
+  [1] "16" "18" "22" "13" "02"
+ [6] "15" "05" "10" "19" "12"
+[11] "07" "09" "08" "11" "01"
+[16] "21" "00" "17" "20" "14"
+[21] "23" "06" "04" "03"
+
+###*Calculate Ride Time*:
+```{r,ride time}
+bike_rides2 <- bike_rides2 %>% mutate(ride_time_m = as.numeric(bike_rides2$ended_at - bike_rides2$started_at) / 60)
+summary(bike_rides2$ride_time_m)
+```
+####Summary:
+  Min.   1st Qu.    Median 
+-29049.97      7.88     14.52 
+     Mean   3rd Qu.      Max. 
+    26.48     26.63  58720.03 
+ 
+ ###*Removal of Negative Ride lengths*:   
+
+###*Summary*:
+```{r,summary check}
+summary(bike_rides2)
+```
+####Result:
+    ride_id         
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+               
+ rideable_type     
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+        
+   started_at                 
+ Min.   :2020-04-01 00:00:30  
+ 1st Qu.:2020-07-12 20:28:17  
+ Median :2020-08-26 18:23:07  
+ Mean   :2020-09-08 20:22:58  
+ 3rd Qu.:2020-10-17 18:56:44  
+ Max.   :2021-03-31 23:59:08  
+    ended_at                  
+ Min.   :2020-04-01 00:10:45  
+ 1st Qu.:2020-07-12 21:13:10  
+ Median :2020-08-26 18:45:42  
+ Mean   :2020-09-08 20:49:17  
+ 3rd Qu.:2020-10-17 19:15:42  
+ Max.   :2021-04-06 11:00:11  
+ start_station_name
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+              
+ start_station_id  
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+         
+ end_station_name  
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+               
+ end_station_id    
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+             
+   start_lat    
+ Min.   :41.64  
+ 1st Qu.:41.88  
+ Median :41.90  
+ Mean   :41.90  
+ 3rd Qu.:41.93  
+ Max.   :42.07  
+   start_lng     
+ Min.   :-87.78  
+ 1st Qu.:-87.66  
+ Median :-87.64  
+ Mean   :-87.64  
+ 3rd Qu.:-87.63  
+ Max.   :-87.53  
+    end_lat     
+ Min.   :41.54  
+ 1st Qu.:41.88  
+ Median :41.90  
+ Mean   :41.91  
+ 3rd Qu.:41.93  
+ Max.   :42.08  
+    end_lng      
+ Min.   :-88.07  
+ 1st Qu.:-87.66  
+ Median :-87.64  
+ Mean   :-87.64  
+ 3rd Qu.:-87.63  
+ Max.   :-87.51  
+ member_casual     
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+              
+      date           
+ Min.   :2020-04-01  
+ 1st Qu.:2020-07-12  
+ Median :2020-08-26  
+ Mean   :2020-09-08  
+ 3rd Qu.:2020-10-17  
+ Max.   :2021-03-31  
+    month          
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+           
+     day           
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+              
+     year          
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+              
+ day_of_week       
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+               
+  year_month       
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+              
+   weekday         
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+                
+  start_hour       
+ Length:3354306    
+ Class :character  
+ Mode  :character  
+                 
+  ride_time_m       
+ Min.   :-29049.97  
+ 1st Qu.:     7.97  
+ Median :    14.62  
+ Mean   :    26.32  
+ 3rd Qu.:    26.72  
+ Max.   : 58720.03  
+ 
+###*Correction of negative
+values for ride time*:
+(will use 95% of data to remove outliers that are affecting results and causing negative values)
+
+```{r,correct for negative time values}
+ventiles = quantile(bike_rides2$ride_time_m, seq(0, 1, by = 0.05))
+ventiles
+```
+####Result:
+Ventiles-
+  0%            5% 
+-29049.966667      3.166667 
+          10%           15% 
+     4.583333      5.750000 
+          20%           25% 
+     6.850000      7.966667 
+          30%           35% 
+     9.116667     10.333333 
+          40%           45% 
+    11.616667     13.033333 
+          50%           55% 
+    14.616667     16.383333 
+          60%           65% 
+    18.416667     20.750000 
+          70%           75% 
+    23.500000     26.716667 
+          80%           85% 
+    30.666667     36.466667 
+          90%           95% 
+    46.150000     73.250000 
+         100% 
+ 58720.033333 
+
+ ###*Remove the outliers*:
+ 
+``` {r, remove outliers,prep plots}
+fig <- function(width,height){options(repr.plot.width = width, repr.plot.height = height)}
+bike_rides3 <- bike_rides2 %>% 
+filter(ride_time_m > as.numeric(ventiles['5%'])) %>%
+filter(ride_time_m < as.numeric(ventiles['95%']))
+print(paste("Removed", nrow(bike_rides2) - nrow(bike_rides3), "rows as outliers" ))
+```
+
+####Result:
+[1] "Removed 350111 rows as outliers"
+
+
+```{r,check dimensions,save}
+dim(bike_rides3)
+head(bike_rides3)
+bike_rides3%>%
+write.csv("bike_rides3.csv")
+```
+###*Calculations/Analysis*:
+```{r,member v casual}
+###Calculate the number of casual versus annual members for comparision
+bike_rides3 %>% group_by(member_casual) %>% summarise(count = length(ride_id), '%' = (length(ride_id) / nrow(bike_rides3)) * 100)
+####Result:
+A tibble:2 × 3
+member_casual
+<chr>
+count
+<int>
+%
+<dbl>
+casual	1228664	39.13656	
+member	1910764	60.86344	
+
+
+bike_rides3 %>% group_by(member_casual) %>% 
+summarise(mean = mean(ride_time_m),'first_quarter' = as.numeric(quantile(ride_time_m, .25)), 'median' = median(ride_time_m), 'third_quarter' = as.numeric(quantile(ride_time_m, .75)), 'IR' = third_quarter - first_quarter)
+
+####Result:
+A tibble:2 × 6
+member_casual
+<chr>
+mean
+<dbl>
+first_quarter
+<dbl>
+median
+<dbl>
+casual	23.67852	11.3	19.16667	
+member	15.48345	7.3	12.18333	
+2 rows | 1-4 of 6 columns
+
+bike_rides3 %>% group_by(rideable_type) %>% summarise(count = length(ride_id),'%' = (length(ride_id) / nrow(bike_rides3)) * 100,'members_p' = (sum(member_casual == "member") / length(ride_id)) * 100,'casual_p' = (sum(member_casual == "casual") / length(ride_id)) * 100, 'member_casual_perc_difer' = members_p - casual_p)
+
+####Result:
+A tibble:3 × 6
+rideable_type
+<chr>
+count
+<int>
+%
+<dbl>
+members_p
+<dbl>
+classic_bike	294441	9.37881	78.26356	
+docked_bike	2291710	72.99769	58.74805	
+electric_bike	553277	17.62350	60.36560	
+
+theme_dark()
+
+ggplot(count.data, aes(x = 2, y = prop, fill = class)) +
+  geom_bar(stat = "identity", color = "white") +
+  coord_polar(theta = "y", start = 0)+
+  geom_text(aes(y = member, label = Member), color = "white")+
+  scale_fill_manual(values = mycols) +
+  theme_void()+
+  xlim(0.5, 2.5)
+
+ggplot(bike_rides3, aes(member_casual, fill = member_casual)) +
+geom_bar() + labs(x = "Casual vs Members", title = "Casual vs. Members distribution") + theme_dark ()
+```
+```{r,check station data}
+
+
+```
+```{r,station count}
+id_name <- bike_rides2  %>%  select('start_station_id', 'start_station_name') %>% arrange('start_station_id') %>% distinct()
+glimpse(id_name)
+id_name %>% count('start_station_id')
+id_name %>% count('start_station_name')
+```
