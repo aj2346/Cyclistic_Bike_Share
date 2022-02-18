@@ -9,7 +9,7 @@ date: "2/18/2022"
 
 ## **Capstone Project, Course 8 (Coursera)**
 
-### *Google Data Analytics Professional Certifcate*
+### *Google Data Analytics Professional Certificate*
 
 ## **Project Background**
 
