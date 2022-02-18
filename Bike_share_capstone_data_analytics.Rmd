@@ -5,7 +5,7 @@
     the datasets are appropriate and will enable you to answer the business questions. The data has been made available by
     Motivate International Inc. under this license)*
 
-# **Process**:
+## **Process**:
 *  *Data Import*
     *12 zip files downloaded to computer*:
 
@@ -14,9 +14,7 @@
 
 * *12 files opened and save in csv format to desktop*:
    Capstone_Project_Data_Analytics
-
-* *12 files uploaded to R.app and converted to R format for upload(files too large to upload directly to RStudio)*:
-  ![R.app](https://www.r-project.org/logo/Rlogo.png)
+  
 * *12 files imported to RStudio*
 
 ## **Set up environment in RStudio**
@@ -84,10 +82,12 @@ View(`12`)
 ```
 
 ###Create combined data frame- combine the (12) separate tables into (1) data frame
+
 ```{r, combine into one data frame}
 bike_rides <- rbind(`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`10`,`11`,`12`)
 ```
 ###check dimensions of new data frame to verify that data combined successfully
+
 ```{r,view combined data frame}
 dim(bike_rides)
 ```   
@@ -152,10 +152,12 @@ unique(bike_rides2$year_month)
 [13] "2020 - 11 (Nov)"
 
 ###*Check data frame*:
+
 ```{r,check}
 head(bike_rides2)
 ```
 ###*Separate weekdays/weekends*:
+
 ```{r,weekdays/weekends}
 bike_rides2 <- bike_rides2 %>%
 mutate(weekday = paste(strftime(bike_rides2$ended_at, "%u"), "-", strftime(bike_rides2$ended_at, "%a"))) 
@@ -168,6 +170,7 @@ unique(bike_rides2$weekday)
 [7] "2 - Tue"
 
 ###*Starting Times*:
+
 ```{r,start_hour}
 bike_rides2 <- bike_rides2 %>% mutate(start_hour = strftime(bike_rides2$ended_at, "%H"))
 unique(bike_rides2$start_hour)
