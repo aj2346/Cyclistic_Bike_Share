@@ -1,49 +1,4 @@
----
-title: "Bike_Share_Capstone_Project"
-author: "Alyssa Gessleman"
-date: "2/7/2022"
-output:
-  pdf_document: default
-  html_document: default
----
-# **Project Information**:
-[https://www.coursera.org/learn/google-data-analytics-capstone/supplement/7PGIT/case-study-1-how-does-a-bike-share-navigate-speedy-success#:~:text=Google%20Data%20Analytics%20Capstone%3A%20Complete%20a%20Case%20Study]
-
-## **Capstone Project, Course 8 (Coursera)**
-### *Google Data Analytics Professional Certifcate*
-
-## **Project Background**
-
- *Company* 
- **Cyclistic**,a bike-share company in Chicago, IL (fictional)
-  *Stakeholders/Company Information* =
-  *Cyclistic Background*: 
-  -A bike-share program launched in 2016 that features more than 5,800 bicycles and 600 docking stations.   
-  -The bikes can be unlocked from one station and returned to any other station in the system anytime
-  -Cyclistic sets itself apart by also offering reclining bikes,hand tricycles, and cargo bikes, making bike-share more inclusive to people    with disabilities and riders who can’t use a standard two-wheeled bike. 
-  -The majority of riders opt for traditional bikes; about 8% of riders use the assistive options. 
-  -Cyclistic users are more likely to ride for leisure, but about 30% use them to commute to work each day.
-  
-  *Stakeholders*
-  ● Lily Moreno: The director of marketing and your manager.  Moreno is responsible for the development of campaigns
-  and initiatives to promote the bike-share program. These may include email, social media, and other channels.
-  ● Cyclistic marketing analytics team: A team of data analysts who are responsible for collecting, analyzing, and
-  reporting data that helps guide Cyclistic marketing strategy. 
-  ● Cyclistic executive team: The notoriously detail-oriented executive team will decide whether to approve the
-  recommended marketing program.
-  
-       *Ask*
-Three questions will guide the future marketing program:
-1. How do annual members and casual riders use Cyclistic bikes differently?
-2. Why would casual riders buy Cyclistic annual memberships?
-3. How can Cyclistic use digital media to influence casual riders to become members?
-   *Business Task* 
-  To maximize the number of annual memberships by increasing the conversion of casual riders into annual members.
-   *Capstone Project Objectives* 
-     * Use the provided 12 month set of historical bike trip data to understand how *casual* (Customers who purchase single-ride or full-day passes) riders & *annual* (Customers who purchase annual memberships)riders **use Cyclistic bikes differently** (*answer question #1 from above*) 
-    * Provide **recommendations** towards the design of a new marketing strategy as Cyclistic's finance analysts have determined that annual members are much more profitable than casual riders.
-
- *Data Source:
+ *Data Source*:
   ## Link to Datasets=
   [https://divvy-tripdata.s3.amazonaws.com/index.html]
   *(Note: The datasets have a different name because Cyclistic is a fictional company. For the purposes of this case study,
@@ -53,28 +8,22 @@ Three questions will guide the future marketing program:
 # **Process**:
 *  *Data Import*
     *12 zip files downloaded to computer*:
-    ![Computer_image](https://cdn.pixabay.com/photo/2016/10/15/13/40/laptop-1742462__340.jpg)
 
     *from*: [https://divvy-tripdata.s3.amazonaws.com/index.html]
         (link to datasets)
 
 * *12 files opened and save in csv format to desktop*:
-    ![Computer_file](https://cdn.pixabay.com/photo/2013/07/12/15/48/directory-150354__480.png)
-Capstone_Project_Data_Analytics
+   Capstone_Project_Data_Analytics
 
 * *12 files uploaded to R.app and converted to R format for upload(files too large to upload directly to RStudio)*:
   ![R.app](https://www.r-project.org/logo/Rlogo.png)
-* *12 files imported to RStudio*:
-    ![RStudio](https://www.rstudio.com/wp-content/uploads/2018/10/RStudio-Logo.png)
+* *12 files imported to RStudio*
 
 ## **Set up environment in RStudio**
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
-
 ``` 
-
 ```{r, install packages and load libraries}
 install.packages("tidyverse")
 library("tidyverse")
@@ -105,6 +54,7 @@ library("extrafont")
 install.packages("ggthemes")
 library("ggthemes")
 ```
+
 ```{r, load datasets and covert to data frames}
 
 `1` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202101-divvy-tripdata.csv")
@@ -180,11 +130,10 @@ bike_rides2$ended_at <- as.POSIXct(bike_rides2$ended_at, tz = "US/Eastern", "%Y-
 str(bike_rides2)
 
 ```
-
-###*Separate month/year*:
+###*Format & separate month/year*:
 ```{r,separate month & year}
 bike_rides2 <- bike_rides2 %>%
-mutate(year_month = paste(strftime(bike_rides2$started_at, "%Y"), "-",    strftime(bike_rides2$started_at, "%m"), paste("(",strftime(bike_rides2$started_at, "%b"), ")", sep = "")))
+mutate(year_month = paste(strftime(bike_rides2$started_at, "%Y"), "-", strftime(bike_rides2$started_at, "%m"), paste("(",strftime(bike_rides2$started_at, "%b"), ")", sep = "")))
 unique(bike_rides2$year_month)
 ```
 ####Result:
@@ -375,8 +324,7 @@ summary(bike_rides2)
  3rd Qu.:    26.72  
  Max.   : 58720.03  
  
-###*Correction of negative
-values for ride time*:
+###*Correction for negative values in ride time*:
 (will use 95% of data to remove outliers that are affecting results and causing negative values)
 
 ```{r,correct for negative time values}
@@ -421,7 +369,6 @@ print(paste("Removed", nrow(bike_rides2) - nrow(bike_rides3), "rows as outliers"
 ####Result:
 [1] "Removed 350111 rows as outliers"
 
-
 ```{r,check dimensions,save}
 dim(bike_rides3)
 head(bike_rides3)
@@ -432,6 +379,7 @@ write.csv("bike_rides3.csv")
 ```{r,member v casual}
 ###Calculate the number of casual versus annual members for comparision
 bike_rides3 %>% group_by(member_casual) %>% summarise(count = length(ride_id), '%' = (length(ride_id) / nrow(bike_rides3)) * 100)
+```
 ####Result:
 A tibble:2 × 3
 member_casual
@@ -443,10 +391,11 @@ count
 casual	1228664	39.13656	
 member	1910764	60.86344	
 
-
+```
+  {R,group}
 bike_rides3 %>% group_by(member_casual) %>% 
 summarise(mean = mean(ride_time_m),'first_quarter' = as.numeric(quantile(ride_time_m, .25)), 'median' = median(ride_time_m), 'third_quarter' = as.numeric(quantile(ride_time_m, .75)), 'IR' = third_quarter - first_quarter)
-
+```
 ####Result:
 A tibble:2 × 6
 member_casual
@@ -460,8 +409,9 @@ median
 casual	23.67852	11.3	19.16667	
 member	15.48345	7.3	12.18333	
 2 rows | 1-4 of 6 columns
-
+```{R, group}
 bike_rides3 %>% group_by(rideable_type) %>% summarise(count = length(ride_id),'%' = (length(ride_id) / nrow(bike_rides3)) * 100,'members_p' = (sum(member_casual == "member") / length(ride_id)) * 100,'casual_p' = (sum(member_casual == "casual") / length(ride_id)) * 100, 'member_casual_perc_difer' = members_p - casual_p)
+```
 
 ####Result:
 A tibble:3 × 6
@@ -477,26 +427,3 @@ classic_bike	294441	9.37881	78.26356
 docked_bike	2291710	72.99769	58.74805	
 electric_bike	553277	17.62350	60.36560	
 
-theme_dark()
-
-ggplot(count.data, aes(x = 2, y = prop, fill = class)) +
-  geom_bar(stat = "identity", color = "white") +
-  coord_polar(theta = "y", start = 0)+
-  geom_text(aes(y = member, label = Member), color = "white")+
-  scale_fill_manual(values = mycols) +
-  theme_void()+
-  xlim(0.5, 2.5)
-
-ggplot(bike_rides3, aes(member_casual, fill = member_casual)) +
-geom_bar() + labs(x = "Casual vs Members", title = "Casual vs. Members distribution") + theme_dark ()
-```
-```{r,check station data}
-
-
-```
-```{r,station count}
-id_name <- bike_rides2  %>%  select('start_station_id', 'start_station_name') %>% arrange('start_station_id') %>% distinct()
-glimpse(id_name)
-id_name %>% count('start_station_id')
-id_name %>% count('start_station_name')
-```
