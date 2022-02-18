@@ -13,7 +13,7 @@ date: "2/18/2022"
 
 ## **Project Background**
 
- *Company* 
+ *Company* =
  **Cyclistic**,a bike-share company in Chicago, IL (fictional)
   
   *Cyclistic Background* 
@@ -24,11 +24,11 @@ date: "2/18/2022"
   * Cyclistic users are more likely to ride for leisure, but about 30% use them to commute to work each day.
   
   *Stakeholders*
-  ● Lily Moreno: The director of marketing and manager of author in this scenario.  Moreno is responsible for the development of campaigns
+  * Lily Moreno: The director of marketing and manager of author in this scenario.  Moreno is responsible for the development of campaigns
   and initiatives to promote the bike-share program.
-  ● Cyclistic marketing analytics team: A team of data analysts who are responsible for collecting, analyzing, and
+  * Cyclistic marketing analytics team: A team of data analysts who are responsible for collecting, analyzing, and
   reporting data that helps guide Cyclistic marketing strategy. 
-  ● Cyclistic executive team: The notoriously detail-oriented executive team will decide whether to approve the
+  * Cyclistic executive team: The notoriously detail-oriented executive team will decide whether to approve the
   recommended marketing program.
   
    *Ask*
