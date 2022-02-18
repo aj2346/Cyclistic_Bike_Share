@@ -36,8 +36,8 @@ Three questions will guide the future marketing program:
 1. How do annual members and casual riders use Cyclistic bikes differently?
 2. Why would casual riders buy Cyclistic annual memberships?
 3. How can Cyclistic use digital media to influence casual riders to become members?
-   *Business Task* 
+   *Business Task* =
   To maximize the number of annual memberships by increasing the conversion of casual riders into annual members.
-   *Capstone Project Objectives* 
+   *Capstone Project Objectives* =
       * Use the provided 12 month set of historical bike trip data to understand how *casual* (Customers who purchase single-ride or full-day           passes) riders & *annual* (Customers who purchase annual memberships)riders **use Cyclistic bikes differently** (*answer question #1             from above*) 
       * Provide **recommendations** towards the design of a new marketing strategy as Cyclistic's finance analysts have determined that annual           members are much more profitable than casual riders.
