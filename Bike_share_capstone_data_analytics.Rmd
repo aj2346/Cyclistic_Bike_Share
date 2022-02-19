@@ -490,5 +490,13 @@ bike_rides3 %>%
   ggplot(aes(x = rideable_type, fill = member_casual)) + geom_bar(position = "dodge") + 
   labs(x= 'Bike Type', y='Number of Rentals', title='Bike Type', fill = 'Member vs. Casual') +
   scale_y_continuous(breaks = c(500000, 1000000, 1500000), labels = c("500K", "1Mil", "1.5Mil"))
+  fill = "Member_Casual") + theme(axis.text.x = element_text(angle = 45))
   ```
   ![image](https://user-images.githubusercontent.com/96959280/154797793-2ee7d19e-7c3e-4d95-ae24-c22caa400034.png)
+  
+  
+  
+  ![image](https://user-images.githubusercontent.com/96959280/154821423-9da56634-5e8c-4320-85f3-d819dc62f86b.png)
+
+
+        
