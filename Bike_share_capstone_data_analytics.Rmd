@@ -470,4 +470,16 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   ```
 ![image](https://user-images.githubusercontent.com/96959280/154797088-bd4900cc-9b59-4f7a-8686-e8a530427651.png)
 
-  
+ ##Average length of rides per week (member vs. casual)
+  ```
+  {R, Member vs. Casual- rides/week}
+  bike_rides3 %>%   #Average length by Customer Type and Day of Week
+  group_by(member_casual, weekday) %>% 
+  summarise(average_ride_length = mean(ride_time_m)) %>% 
+  ggplot(aes(x=weekday, y = average_ride_length, fill = member_casual))+
+  geom_col(position = "dodge") + labs (x="Day of Week", y="Average Ride Length(min)", 
+  title = "Average Ride Time per Type and Day of Week", 
+  fill = "Member vs Casual")
+  ```
+  ![image](https://user-images.githubusercontent.com/96959280/154797456-c7ed4728-3138-43a9-98b0-2611e63a7931.png)
+
