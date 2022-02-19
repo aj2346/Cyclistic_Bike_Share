@@ -51,6 +51,8 @@ install.packages("extrafont")
 library("extrafont")
 install.packages("ggthemes")
 library("ggthemes")
+install.packages("RColorBrewer")
+library("RColorBrewer")
 ```
 
 ```{r, load datasets and covert to data frames}
