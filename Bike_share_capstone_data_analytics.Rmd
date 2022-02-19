@@ -445,6 +445,8 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   ![image](https://user-images.githubusercontent.com/96959280/154780166-29a9f285-d43c-43a3-91f5-870f708a48c3.png)
 
 ##Graph of Rides per Month
+  ```
+  {R, rides per Month}
   bike_rides3 %>%   
   group_by(member_casual, year_month) %>%  
   summarise(total_rides = n(),`ride_time_m` = mean(ride_time_m)) %>% 
@@ -452,3 +454,6 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   ggplot(aes(x=year_month, y=total_rides, fill = member_casual)) + geom_col(position = "dodge") + 
   labs(x= "Month", y= "Total Number of Rides", title = "Rides per Month", fill = "Member vs Casual") + 
   scale_y_continuous(breaks = c(100000, 200000, 300000, 400000), labels = c("100K", "200K", "300K", "400K")) + theme(axis.text.x = element_text(angle = 45))
+  ```
+  ![image](https://user-images.githubusercontent.com/96959280/154781293-8ec36539-a129-4f7d-aab8-6c1a5343dbc1.png)
+
