@@ -442,4 +442,5 @@ ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(p
 labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 'Member vs Casual') +
 + scale_y_continuous(breaks = c(250000, 400000, 550000), labels = c("250K", "400K", "550K"))
 ```
-  ![image](https://user-images.githubusercontent.com/96959280/154779890-7776aefa-f1f2-4ede-9a83-8e88af232c8b.png)
+  ![image](https://user-images.githubusercontent.com/96959280/154780166-29a9f285-d43c-43a3-91f5-870f708a48c3.png)
+
