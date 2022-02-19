@@ -429,4 +429,17 @@ members_p
 classic_bike	294441	9.37881	78.26356	
 docked_bike	2291710	72.99769	58.74805	
 electric_bike	553277	17.62350	60.36560	
-
+  
+##*Visualization*
+ ##Graph of total rides per day of the week
+```
+  {R, Weekday Graph}
+  bike_rides3 %>%   
+group_by(member_casual, weekday) %>% 
+summarise(number_of_rides = n() ) %>% 
+arrange(member_casual, weekday) %>% 
+ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(position = "dodge") + 
+labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 'Member vs Casual') +
++ scale_y_continuous(breaks = c(250000, 400000, 550000), labels = c("250K", "400K", "550K"))
+```
+  ![image](https://user-images.githubusercontent.com/96959280/154779890-7776aefa-f1f2-4ede-9a83-8e88af232c8b.png)
