@@ -45,3 +45,4 @@ date: "2/18/2022"
       * Provide **recommendations** towards the design of a new marketing strategy as Cyclistic's finance analysts have determined that annual           members are much more profitable than casual riders.
 ![image](https://user-images.githubusercontent.com/96959280/154780193-8234b67a-1f44-4f46-92d4-86dfbf5e334f.png)
 ![image](https://user-images.githubusercontent.com/96959280/154781320-453ba1ec-f32b-4a66-a123-bcc146249736.png)
+![image](https://user-images.githubusercontent.com/96959280/154797143-9d265981-2de1-4d38-81b3-bd116e206047.png)
