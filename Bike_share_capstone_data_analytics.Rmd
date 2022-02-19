@@ -483,3 +483,12 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   ```
   ![image](https://user-images.githubusercontent.com/96959280/154797456-c7ed4728-3138-43a9-98b0-2611e63a7931.png)
 
+  ##Bike Type vs. Member Type
+  ```
+  {R, rideable vs. member/casual}
+bike_rides3 %>%    
+  ggplot(aes(x = rideable_type, fill = member_casual)) + geom_bar(position = "dodge") + 
+  labs(x= 'Bike Type', y='Number of Rentals', title='Bike Type', fill = 'Member vs. Casual') +
+  scale_y_continuous(breaks = c(500000, 1000000, 1500000), labels = c("500K", "1Mil", "1.5Mil"))
+  ```
+  ![image](https://user-images.githubusercontent.com/96959280/154797793-2ee7d19e-7c3e-4d95-ae24-c22caa400034.png)
