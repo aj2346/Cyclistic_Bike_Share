@@ -44,3 +44,4 @@ date: "2/18/2022"
       * Use the provided 12 month set of historical bike trip data to understand how *casual* (Customers who purchase single-ride or full-day           passes) riders & *annual* (Customers who purchase annual memberships)riders **use Cyclistic bikes differently** (*answer question #1             from above*) 
       * Provide **recommendations** towards the design of a new marketing strategy as Cyclistic's finance analysts have determined that annual           members are much more profitable than casual riders.
 ![image](https://user-images.githubusercontent.com/96959280/154780193-8234b67a-1f44-4f46-92d4-86dfbf5e334f.png)
+![image](https://user-images.githubusercontent.com/96959280/154781320-453ba1ec-f32b-4a66-a123-bcc146249736.png)
