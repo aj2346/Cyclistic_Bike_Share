@@ -495,8 +495,8 @@ bike_rides3 %>%
   ![image](https://user-images.githubusercontent.com/96959280/154797793-2ee7d19e-7c3e-4d95-ae24-c22caa400034.png)
   
  ```
-  ##Determining Top Stations per Member Type with removal of cells without station names
-  {R, top stations}
+  ##*Determining Top Stations per Member Type* (with removal of cells without station names)
+{R, top stations}
 all_stations <- bind_rows(data.frame("stations" = bike_rides3$start_station_name, "member_casual" = bike_rides3$member_casual), data.frame("stations" = bike_rides3$end_station_name, "member_casual" = bike_rides3$member_casual))
                   
 all_stations_v2 <- all_stations[!(all_stations$stations == "" | is.na(all_stations$stations)),]
@@ -512,11 +512,19 @@ group_by(stations) %>%
 summarise(station_count = n()) %>% 
 arrange(desc(station_count)) %>% 
 head(n=10)
-
+###* *Top Ten Stations for Annual Members*:
 ggplot(data = top_10_station_member) +  geom_col(aes(x = reorder(stations, station_count), y = station_count), fill= "#7570B3") + labs(title = "Top 10 Used Stations by Members", y = "Number of Rides", x = "") + scale_y_continuous(labels = scales::comma) + coord_flip() + theme_minimal()
  ```
+![image](https://user-images.githubusercontent.com/96959280/154821423-9da56634-5e8c-4320-85f3-d819dc62f86b.png)
   
-  ![image](https://user-images.githubusercontent.com/96959280/154821423-9da56634-5e8c-4320-85f3-d819dc62f86b.png)
+###* *Top Ten Stations for Casual Riders*:
+```
+{R,Casual top ten}
+ggplot(data = top_10_station_casual) +
++   geom_col(aes(x = reorder(stations, station_count), y = station_count), fill = "#E6AB02") + labs(title = "Top 10 Used Stations by Casual Riders", x = "", y = "Number of Rides") + scale_y_continuous(labels = scales::comma) +coord_flip() +theme_minimal() 
+```
 
+ ![image](https://user-images.githubusercontent.com/96959280/154821961-20d51325-6811-4763-bb73-876a0fa1397a.png)
+ 
 
         
