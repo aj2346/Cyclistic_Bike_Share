@@ -527,6 +527,16 @@ ggplot(data = top_10_station_casual) +
 ```
 
  ![image](https://user-images.githubusercontent.com/96959280/154821961-20d51325-6811-4763-bb73-876a0fa1397a.png)
- 
-
-        
+###* *Summary Info*:
+```
+{R, Summary}
+basic_stats <- bike_rides3 %>%
+  summarize(average_ride_length = duration(mean(ride_time_m)), 
+  max_ride_length = duration(max(ride_time_m)), 
+  min_ride_length = duration(min(ride_time_m)), 
+ median_ride_length = duration(median(ride_time_m)))
+ ```
+ # A tibble: 1 × 4
+  average_ride_length max_ride_length                   min_ride_length   median_ride_length
+  <Duration>          <Duration>                        <Duration>        <Duration>        
+1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
