@@ -648,4 +648,20 @@ mapIL <- leaflet(data = IL) %>%
               options = layersControlOptions(collapsed = TRUE)) 
 # add map inset to plot
 mapNH %>% addMiniMap()
+    
+library(sf)
+library(ggplot2)
+library(viridis)
+IL <- st_read(system.file("shape/il.shp", package = "sf"),
+  quiet = TRUE
+)
+ggplot(data = il, aes(fill = SID74)) + geom_sf() +
+  scale_fill_viridis() + theme_bw()
+library(geoR)
+ggplot(data.frame(cbind(bike_rides3$coords, stations = start_lat$start_lng)))+
+  geom_point(aes(east, north, color = Rainfall), size = 2) +
+  coord_fixed(ratio = 1) +
+  scale_color_gradient(low = "blue", high = "orange") +
+  geom_path(data = data.frame(bike_rides3$border), aes(east, north)) +
+  theme_bw()
 ```
