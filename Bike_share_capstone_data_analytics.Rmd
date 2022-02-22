@@ -87,6 +87,12 @@ install.packages("ggrepel")
 library("ggrepel")
 install.packages("tidyverse")
 library("tidyverse")
+install.packages("raster")
+library("raster")
+install.packages("leaflet")
+library("leaflet")
+install.packages("leaflet.extras")
+library("leaflet.extras")
 ```
 
 ```{r, load datasets and covert to data frames}
@@ -576,6 +582,7 @@ basic_stats <- bike_rides3 %>%
 1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
 ```
  remotes::install_github("r-spatial/mapview")
+ devtools::install_github("rspatial/dismo")
  install_github("Chicago/RSocrata")
  world <- ne_countries(scale = "medium", returnclass = "sf")
  ggplot(data = world) +
