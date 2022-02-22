@@ -53,8 +53,8 @@ install.packages("ggthemes")
 library("ggthemes")
 install.packages("RColorBrewer")
 library("RColorBrewer")
-install.packages("mapview")
-library("mapview")
+install.packages("mapView")
+library("mapView")
 install.packages("sf")
 library("sf")
 install.packages("lattice")
@@ -65,8 +65,30 @@ install.packages("vapoRwave")
 library("vapoRwave")
 install.packages("viridis")
 library("viridis")
+install.packages("RSocrata")
+library("RSocrata")
+install.packages("readr")
+library("readr")
+install.packages("readxl")
+library("readxl")
+install.packages("tmap")
+library("tmap")
+install.packages("sf")
+library("sf")
+install.packages("rnaturalearth")
+library("rnaturalearth")
+install.packages"rnaturalearthdata")
+library("rnaturalearthdata")
+install.packages("rgeos")
+library("rgeos")
+install.packages("ggspatial")
+library("ggspatial")
+install.packages("ggrepel")
+library("ggrepel")
+install.packages("tidyverse")
+library("tidyverse")
+```
 
-install.packages("maps","raster","readr","readxl","tmap")
 ```{r, load datasets and covert to data frames}
 
 `1` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202101-divvy-tripdata.csv")
@@ -552,3 +574,10 @@ basic_stats <- bike_rides3 %>%
   average_ride_length max_ride_length                   min_ride_length   median_ride_length
   <Duration>          <Duration>                        <Duration>        <Duration>        
 1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
+```
+ remotes::install_github("r-spatial/mapview")
+ install_github("Chicago/RSocrata")
+ world <- ne_countries(scale = "medium", returnclass = "sf")
+ ggplot(data = world) +
+       geom_sf()
+ install_github("Chicago/RSocrata")
