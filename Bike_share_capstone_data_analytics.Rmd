@@ -53,8 +53,19 @@ install.packages("ggthemes")
 library("ggthemes")
 install.packages("RColorBrewer")
 library("RColorBrewer")
+install.packages("mapview")
+library("mapview")
+install.packages("sf")
+library("sf")
+install.packages("lattice")
+library("lattice")
+install.packages("leafpop")
+library("leafpop")
+install.packages("vapoRwave")
+library("vapoRwave")
+install.packages("viridis")
+library("viridis")
 ```
-
 ```{r, load datasets and covert to data frames}
 
 `1` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202101-divvy-tripdata.csv")
