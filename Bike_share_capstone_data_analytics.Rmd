@@ -581,6 +581,7 @@ basic_stats <- bike_rides3 %>%
   <Duration>          <Duration>                        <Duration>        <Duration>        
 1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
 ```
+  {R, create map}
  remotes::install_github("r-spatial/mapview")
  devtools::install_github("rspatial/dismo")
  install_github("Chicago/RSocrata")
@@ -588,3 +589,63 @@ basic_stats <- bike_rides3 %>%
  ggplot(data = world) +
        geom_sf()
  install_github("Chicago/RSocrata")
+ States <- raster::getData("GADM", country = "United States", level = 1)
+ IL <- States[States$NAME_1 == "Illinois",]
+ plot(IL)
+ set.seed(12345)
+ randPts <- sp::spsample(x = IL, n = 100, type = "random")
+ plot(IL)
+ plot(randPts, 
+     add = TRUE,
+     pch = 19)
+ plot(States, 
+     add = TRUE)
+ plot(IL)
+sp::degAxis(side = 1)
+sp::degAxis(side = 2,las = 2)
+plot(IL)
+arrow1 <-  layout.north.arrow(type = 1) 
+Narrow1 <- maptools::elide(arrow1, shift = c(extent(IL)[2],extent(IL)[3]))
+plot(Narrow1, add = TRUE,col = "black")
+arrow2 <- layout.north.arrow(type = 2)
+Narrow2 <- maptools::elide(arrow2, shift = c(extent(IL)[1]-0.5,extent(IL)[3]))
+plot(Narrow2, add = TRUE, col = "blue")
+raster::scalebar(d = 100, # distance in km
+                 xy = c(extent(IL)[1]+0.01,extent(IL)[3]+0.15),
+                 type = "bar", 
+                 divs = 2, 
+                 below = "km", 
+                 lonlat = TRUE,
+                 label = c(0,50,100), 
+                 adj=c(0, -0.75), 
+                 lwd = 2)
+ # Read the State boundaries
+States <- raster::getData("GADM",country = "United States", level = 1)
+
+# Subset to include only New Hampshire
+NH <- States[States$NAME_1 == "Illinois",]
+
+# This call makes the map
+  # inital map
+mapIL <- leaflet(data = IL) %>%  
+  # add a baselayer
+      addTiles() %>% 
+  # specific baselayer with name          
+   addProviderTiles("Esri.WorldImagery", group = "Aerial") %>% 
+  # specific baselayer with name
+   addProviderTiles("OpenTopoMap", group = "Topography")%>% 
+  # add New Hampshire polygon
+   addPolygons(., stroke = TRUE, weight = 1, color = "black", 
+  # highlight when over
+      highlightOptions = highlightOptions(color = "white", weight = 2, 
+      bringToFront = TRUE)) %>%
+ # Layers control 
+  # give user control of basemap 
+            addLayersControl(      
+      # these groups are labelled above
+              baseGroups = c("Aerial", "Topography"), 
+        # collapse options
+              options = layersControlOptions(collapsed = TRUE)) 
+# add map inset to plot
+mapNH %>% addMiniMap()
+```
