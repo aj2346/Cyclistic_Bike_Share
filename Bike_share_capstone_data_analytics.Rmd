@@ -65,7 +65,8 @@ install.packages("vapoRwave")
 library("vapoRwave")
 install.packages("viridis")
 library("viridis")
-```
+
+install.packages("maps","raster","readr","readxl","tmap")
 ```{r, load datasets and covert to data frames}
 
 `1` <- read.csv("~/Desktop/Capstone_Project_Data_Analytics/Data_Analytics_Capstone_Project/202101-divvy-tripdata.csv")
