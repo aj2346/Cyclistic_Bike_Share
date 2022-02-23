@@ -615,11 +615,9 @@ chicago_map + geom_point(data=station.info, aes(x=long,y=lat), color='red',size=
 chicago_map + geom_point(data=station.info,aes(x=long,y=lat,color=n.trips),size=3,alpha=0.75)+
 scale_colour_gradient(high="red",low='green')+ 
 xlab('')+ylab('')   
-    
 
-    
-
-    
+ 
+![image](https://user-images.githubusercontent.com/96959280/155409684-639d4d33-0268-47fd-a006-f490af7c6381.png)    
 
     
  
