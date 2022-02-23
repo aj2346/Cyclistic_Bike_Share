@@ -562,8 +562,19 @@ ggplot(data = top_10_station_member) +  geom_col(aes(x = reorder(stations, stati
 ###* *Top Ten Stations for Casual Riders*:
 ```
 {R,Casual top ten}
+  
+bike_rides3 %>%
+group_by(start_station_name,end_station_name) %>%
+filter(start_station_name!="NULL") %>%
+summarize(rides = n()) %>% ungroup %>% top_n(10)
+  
+bike_rides3 %>%
+  group_by(start_station_name,end_station_name) %>%
+    filter(start_station_name!="NULL") %>%
+    summarize(rides = n()) %>% ungroup %>% top_n(20) 
+  
 ggplot(data = top_10_station_casual) +
-+   geom_col(aes(x = reorder(stations, station_count), y = station_count), fill = "#E6AB02") + labs(title = "Top 10 Used Stations by Casual Riders", x = "", y = "Number of Rides") + scale_y_continuous(labels = scales::comma) +coord_flip() +theme_minimal() 
+geom_col(aes(x = reorder(stations, station_count), y = station_count), fill = "#E6AB02") + labs(title = "Top 10 Used Stations by Casual Riders", x = "", y = "Number of Rides") + scale_y_continuous(labels = scales::comma) +coord_flip() +theme_minimal() 
 ```
 
  ![image](https://user-images.githubusercontent.com/96959280/154821961-20d51325-6811-4763-bb73-876a0fa1397a.png)
@@ -582,108 +593,30 @@ basic_stats <- bike_rides3 %>%
 1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
 ```
   {R, create map}
- remotes::install_github("r-spatial/mapview")
- devtools::install_github("rspatial/dismo")
- install_github("Chicago/RSocrata")
- world <- ne_countries(scale = "medium", returnclass = "sf")
- ggplot(data = world) +
-       geom_sf()
- install_github("Chicago/RSocrata")
- States <- raster::getData("GADM", country = "United States", level = 1)
- IL <- States[States$NAME_1 == "Illinois",]
- plot(IL)
- set.seed(12345)
- randPts <- sp::spsample(x = IL, n = 100, type = "random")
- plot(IL)
- plot(randPts, 
-     add = TRUE,
-     pch = 19)
- plot(States, 
-     add = TRUE)
- plot(IL)
-sp::degAxis(side = 1)
-sp::degAxis(side = 2,las = 2)
-plot(IL)
-arrow1 <-  layout.north.arrow(type = 1) 
-Narrow1 <- maptools::elide(arrow1, shift = c(extent(IL)[2],extent(IL)[3]))
-plot(Narrow1, add = TRUE,col = "black")
-arrow2 <- layout.north.arrow(type = 2)
-Narrow2 <- maptools::elide(arrow2, shift = c(extent(IL)[1]-0.5,extent(IL)[3]))
-plot(Narrow2, add = TRUE, col = "blue")
-raster::scalebar(d = 100, # distance in km
-                 xy = c(extent(IL)[1]+0.01,extent(IL)[3]+0.15),
-                 type = "bar", 
-                 divs = 2, 
-                 below = "km", 
-                 lonlat = TRUE,
-                 label = c(0,50,100), 
-                 adj=c(0, -0.75), 
-                 lwd = 2)
- # Read the State boundaries
-States <- raster::getData("GADM",country = "United States", level = 1)
-
-# Subset to include only New Hampshire
-NH <- States[States$NAME_1 == "Illinois",]
-
-# This call makes the map
-  # inital map
-mapIL <- leaflet(data = IL) %>%  
-  # add a baselayer
-      addTiles() %>% 
-  # specific baselayer with name          
-   addProviderTiles("Esri.WorldImagery", group = "Aerial") %>% 
-  # specific baselayer with name
-   addProviderTiles("OpenTopoMap", group = "Topography")%>% 
-  # add New Hampshire polygon
-   addPolygons(., stroke = TRUE, weight = 1, color = "black", 
-  # highlight when over
-      highlightOptions = highlightOptions(color = "white", weight = 2, 
-      bringToFront = TRUE)) %>%
- # Layers control 
-  # give user control of basemap 
-            addLayersControl(      
-      # these groups are labelled above
-              baseGroups = c("Aerial", "Topography"), 
-        # collapse options
-              options = layersControlOptions(collapsed = TRUE)) 
-# add map inset to plot
-mapNH %>% addMiniMap()
-    
-library(sf)
-library(ggplot2)
-library(viridis)
-IL <- st_read(system.file("shape/il.shp", package = "sf"),
-  quiet = TRUE
-)
-ggplot(data = il, aes(fill = SID74)) + geom_sf() +
-  scale_fill_viridis() + theme_bw()
-library(geoR)
-ggplot(data.frame(cbind(bike_rides3$coords, stations = start_lat$start_lng)))+
-  geom_point(aes(east, north, color = Rainfall), size = 2) +
-  coord_fixed(ratio = 1) +
-  scale_color_gradient(low = "blue", high = "orange") +
-  geom_path(data = data.frame(bike_rides3$border), aes(east, north)) +
-  theme_bw()
-      
       
  ##plotting stations
  ```{R, plot station locations}
+   
+chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, right = -87.2713, top = 42.0677), zoom = 11)
+ 
+chicago_map <- ggmap(chicago)   
+               
+station.info <- bike_rides3 %>% group_by(start_station_id) %>% summarise(lat=as.numeric(start_lat), long=as.numeric(start_lng),name=start_station_name, n.trips=n())
+    
+str(station.info)
+ 
       
-start_loc <- unique(bike_rides3[,c('start_lng', 'start_lat', 'start_station_id', 'start_station_name')]) %>% rename(Longitude = start_lng, Latitude = start_lat, Stid = start_station_id, Stname = start_station_name)
+chicago_map + geom_point(data=station.info,aes(x=long,y=lat,color=n.trips),size=3,alpha=0.75)+
+scale_colour_gradient(high="red",low='green')+ 
+xlab('')+ylab('')   
     
-end_loc <- unique(bike_rides3[,c('end_lng', 'end_lat', 'end_station_id', 'end_station_name')]) %>% rename(Longitude = end_lng, Latitude = end_lat, Stid = end_station_id, Stname = end_station_name) 
 
-station_loc <- unique(rbind(start_loc, end_loc))
-> rm(start_loc, end_loc)
     
-library(leaflet)
-    
- m1 <- 
-leaflet(station_loc) %>%
-  addProviderTiles(providers$Stamen.TonerLines, group = "Basemap") %>%
-  addProviderTiles(providers$Stamen.TonerLite, group = "Basemap") %>%
-  addMarkers(label = paste(station_loc$Stid, station_loc$Longitude, station_loc$Latitude, station_loc$Stname, sep=",")
-  )
 
-library(widgetframe)
-widgetframe::frameWidget(m1)```
+    
+
+    
+ 
+  
+
+
