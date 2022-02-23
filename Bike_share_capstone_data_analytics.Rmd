@@ -605,7 +605,13 @@ station.info <- bike_rides3 %>% group_by(start_station_id) %>% summarise(lat=as.
     
 str(station.info)
  
-      
+###* *Map of Station Locations*:
+
+chicago_map + geom_point(data=station.info, aes(x=long,y=lat), color='red',size=2)+
+  theme(axis.ticks = element_blank(), axis.text = element_blank())+ xlab('')+ylab('')
+    
+  ![image](https://user-images.githubusercontent.com/96959280/155408587-9537b1f2-7ab5-4051-a5a1-90516725d409.png) 
+    
 chicago_map + geom_point(data=station.info,aes(x=long,y=lat,color=n.trips),size=3,alpha=0.75)+
 scale_colour_gradient(high="red",low='green')+ 
 xlab('')+ylab('')   
