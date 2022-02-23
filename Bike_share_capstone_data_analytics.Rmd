@@ -664,4 +664,16 @@ ggplot(data.frame(cbind(bike_rides3$coords, stations = start_lat$start_lng)))+
   scale_color_gradient(low = "blue", high = "orange") +
   geom_path(data = data.frame(bike_rides3$border), aes(east, north)) +
   theme_bw()
+      
+      
+ ##plotting stations
+ ```{R, plot station locations}
+      
+start_loc <- unique(bike_rides3[,c('start_lng', 'start_lat', 'start_station_id', 'start_station_name')]) %>% rename(Longitude = start_lng, Latitude = start_lat, Stid = start_station_id, Stname = start_station_name)
+    
+end_loc <- unique(bike_rides3[,c('end_lng', 'end_lat', 'end_station_id', 'end_station_name')]) %>% rename(Longitude = end_lng, Latitude = end_lat, Stid = end_station_id, Stname = end_station_name) 
+
+station_loc <- unique(rbind(start_loc, end_loc))
+> rm(start_loc, end_loc)
+    
 ```
