@@ -676,4 +676,14 @@ end_loc <- unique(bike_rides3[,c('end_lng', 'end_lat', 'end_station_id', 'end_st
 station_loc <- unique(rbind(start_loc, end_loc))
 > rm(start_loc, end_loc)
     
-```
+library(leaflet)
+    
+ m1 <- 
+leaflet(station_loc) %>%
+  addProviderTiles(providers$Stamen.TonerLines, group = "Basemap") %>%
+  addProviderTiles(providers$Stamen.TonerLite, group = "Basemap") %>%
+  addMarkers(label = paste(station_loc$Stid, station_loc$Longitude, station_loc$Latitude, station_loc$Stname, sep=",")
+  )
+
+library(widgetframe)
+widgetframe::frameWidget(m1)```
