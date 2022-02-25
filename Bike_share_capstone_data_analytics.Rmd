@@ -123,12 +123,12 @@ View(`11`)
 View(`12`)
 ```
 
-###Create combined data frame- combine the (12) separate tables into (1) data frame
+### Create combined data frame- combine the (12) separate tables into (1) data frame
 
 ```{r, combine into one data frame}
 bike_rides <- rbind(`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`10`,`11`,`12`)
 ```
-###Check dimensions of new data frame to verify that data combined successfully
+### Check dimensions of new data frame to verify that data combined successfully
 
 ```{r,view combined data frame}
 dim(bike_rides)
@@ -137,50 +137,71 @@ dim(bike_rides)
 
 ##Begin Cleaning:
  
-###Remove_empty - check for empty rows/columns:
+###* *Remove_empty - check for empty rows/columns*:
 ```{r,check for empty rows/columns}
 bike_rides <- janitor::remove_empty(bike_rides, which = c("cols"))
 bike_rides <- janitor::remove_empty(bike_rides, which = c("rows"))
+
 ####Result:no completely empty rows or columns present
 ```
- ###*Remove duplicate rows*:
+ ###* *Remove duplicate rows*:
 ```{r,remove duplicates}
 bike_rides2 <- bike_rides[!duplicated(bike_rides$ride_id), ]
 print(paste("Removed", nrow(bike_rides) - nrow(bike_rides2), "duplicated rows"))
 ```
-####Result:
+#### Result:
 [1] "Removed 209 duplicated rows"
 
-###Re-check dimensions:
+### Re-check dimensions:
 ```{r,data frame dimensions}
 dim(bike_rides2)
 glimpse(bike_rides2)
 ```
-###*Remove empty* cells(missing station id,ride id,rider type,starting station, ending station, & starting/end lat,long):
+###* *Remove empty* cells(missing station id,ride id,rider type,starting station, ending station, & starting/end lat,long):
 ```{r,remove empty cells}
 na.omit(bike_rides2)
 print.function(na.omit(bike_rides2))
 ```
-####Result:
+#### Result:
 [ reached 'max' / getOption("max.print") -- omitted 3354438 rows ]
  
-###*Parsing/date&time*:
+### *Parsing/date&time*:
 ```{r,Parsing Date&Time}
 bike_rides2$started_at <- as.POSIXct(bike_rides2$started_at, tz = "US/Eastern","%Y-%m-%d %H:%M:%S")
 bike_rides2$ended_at <- as.POSIXct(bike_rides2$ended_at, tz = "US/Eastern", "%Y-%m-%d %H:%M:%S")
 ```
-####check columms:
+#### Check columms:
 ```{r,column check}
 str(bike_rides2)
-
 ```
-###*Format & separate month/year*:
+#### Result:
+'data.frame':	3489539 obs. of  17 variables:
+ $ ride_id           : chr  "E19E6F1B8D4C42ED" "DC88F20C2C55F27F" "EC45C94683FE3F27" "4FA453A75AE377DB" ...
+ $ rideable_type     : chr  "electric_bike" "electric_bike" "electric_bike" "electric_bike" ...
+ $ started_at        : POSIXct, format: "2021-01-23 16:14:19" "2021-01-27 18:43:08" "2021-01-21 22:35:54" "2021-01-07 13:31:13" ...
+ $ ended_at          : POSIXct, format: "2021-01-23 16:24:44" "2021-01-27 18:47:12" "2021-01-21 22:37:14" "2021-01-07 13:42:55" ...
+ $ start_station_name: chr  "California Ave & Cortez St" "California Ave & Cortez St" "California Ave & Cortez St" "California Ave & Cortez St" ...
+ $ start_station_id  : chr  "17660" "17660" "17660" "17660" ...
+ $ end_station_name  : chr  "" "" "" "" ...
+ $ end_station_id    : chr  "" "" "" "" ...
+ $ start_lat         : num  41.9 41.9 41.9 41.9 41.9 ...
+ $ start_lng         : num  -87.7 -87.7 -87.7 -87.7 -87.7 ...
+ $ end_lat           : num  41.9 41.9 41.9 41.9 41.9 ...
+ $ end_lng           : num  -87.7 -87.7 -87.7 -87.7 -87.7 ...
+ $ member_casual     : chr  "member" "member" "member" "member" ...
+ $ year_month        : chr  "2021 - 01 (Jan)" "2021 - 01 (Jan)" "2021 - 01 (Jan)" "2021 - 01 (Jan)" ...
+ $ weekday           : chr  "6 - Sat" "3 - Wed" "4 - Thu" "4 - Thu" ...
+ $ start_hour        : chr  "16" "18" "22" "13" ...
+ $ ride_time_m       : num  10.417 4.067 1.333 11.7 0.717 ...
+
+###* *Format & separate month/year*:
+
 ```{r,separate month & year}
 bike_rides2 <- bike_rides2 %>%
 mutate(year_month = paste(strftime(bike_rides2$started_at, "%Y"), "-", strftime(bike_rides2$started_at, "%m"), paste("(",strftime(bike_rides2$started_at, "%b"), ")", sep = "")))
 unique(bike_rides2$year_month)
 ```
-####Result:
+#### Result:
 [1] "2021 - 01 (Jan)"
  [2] "2020 - 12 (Dec)"
  [3] "2021 - 02 (Feb)"
@@ -195,215 +216,117 @@ unique(bike_rides2$year_month)
 [12] "2020 - 10 (Oct)"
 [13] "2020 - 11 (Nov)"
 
-###*Check data frame*:
+###* *Check data frame*:
 
 ```{r,check}
 head(bike_rides2)
 ```
-###*Separate weekdays/weekends*:
+#### Result:
+  ride_id rideable_type          started_at            ended_at         start_station_name start_station_id end_station_name
+1 E19E6F1B8D4C42ED electric_bike 2021-01-23 16:14:19 2021-01-23 16:24:44 California Ave & Cortez St            17660                 
+2 DC88F20C2C55F27F electric_bike 2021-01-27 18:43:08 2021-01-27 18:47:12 California Ave & Cortez St            17660                 
+3 EC45C94683FE3F27 electric_bike 2021-01-21 22:35:54 2021-01-21 22:37:14 California Ave & Cortez St            17660                 
+4 4FA453A75AE377DB electric_bike 2021-01-07 13:31:13 2021-01-07 13:42:55 California Ave & Cortez St            17660                 
+5 BE5E8EB4E7263A0B electric_bike 2021-01-23 02:24:02 2021-01-23 02:24:45 California Ave & Cortez St            17660                 
+6 5D8969F88C773979 electric_bike 2021-01-09 14:24:07 2021-01-09 15:17:54 California Ave & Cortez St            17660                 
+  end_station_id start_lat start_lng end_lat end_lng member_casual      year_month weekday start_hour ride_time_m
+1                 41.90034 -87.69674   41.89  -87.72        member 2021 - 01 (Jan) 6 - Sat         16  10.4166667
+2                 41.90033 -87.69671   41.90  -87.69        member 2021 - 01 (Jan) 3 - Wed         18   4.0666667
+3                 41.90031 -87.69664   41.90  -87.70        member 2021 - 01 (Jan) 4 - Thu         22   1.3333333
+4                 41.90040 -87.69666   41.92  -87.69        member 2021 - 01 (Jan) 4 - Thu         13  11.7000000
+5                 41.90033 -87.69670   41.90  -87.70        casual 2021 - 01 (Jan) 6 - Sat         02   0.7166667
+6                 41.90041 -87.69676   41.94  -87.71        casual 2021 - 01 (Jan) 6 - Sat         15  53.7833333
+
+###* *Separate weekdays/weekends*:
 
 ```{r,weekdays/weekends}
 bike_rides2 <- bike_rides2 %>%
 mutate(weekday = paste(strftime(bike_rides2$ended_at, "%u"), "-", strftime(bike_rides2$ended_at, "%a"))) 
 unique(bike_rides2$weekday)
 ```
-####Result:
+#### Result:
+
 [1] "6 - Sat" "3 - Wed"
 [3] "4 - Thu" "1 - Mon"
 [5] "7 - Sun" "5 - Fri"
 [7] "2 - Tue"
 
-###*Starting Times*:
+###* *Calculate Starting Times*:
 
 ```{r,start_hour}
 bike_rides2 <- bike_rides2 %>% mutate(start_hour = strftime(bike_rides2$ended_at, "%H"))
 unique(bike_rides2$start_hour)
 ```
-####Result:
-  [1] "16" "18" "22" "13" "02"
- [6] "15" "05" "10" "19" "12"
+#### Result:
+
+[1] "16" "18" "22" "13" "02"
+[6] "15" "05" "10" "19" "12"
 [11] "07" "09" "08" "11" "01"
 [16] "21" "00" "17" "20" "14"
 [21] "23" "06" "04" "03"
 
-###*Calculate Ride Time*:
+###* *Calculate Ride Time*:
+
 ```{r,ride time}
 bike_rides2 <- bike_rides2 %>% mutate(ride_time_m = as.numeric(bike_rides2$ended_at - bike_rides2$started_at) / 60)
 summary(bike_rides2$ride_time_m)
 ```
-####Summary:
+#### Summary:
   Min.   1st Qu.    Median 
 -29049.97      7.88     14.52 
      Mean   3rd Qu.      Max. 
     26.48     26.63  58720.03 
  
- ###*Correction for Negative Ride lengths*:   
+###* *Checking for Errors*:   
 
-###*Summary*:
+### *Summary*:
+
 ```{r,summary check}
 summary(bike_rides2)
 ```
-####Result:
-    ride_id         
- Length:3354306    
- Class :character  
- Mode  :character  
-               
- rideable_type     
- Length:3354306    
- Class :character  
- Mode  :character  
-        
-   started_at                 
- Min.   :2020-04-01 00:00:30  
- 1st Qu.:2020-07-12 20:28:17  
- Median :2020-08-26 18:23:07  
- Mean   :2020-09-08 20:22:58  
- 3rd Qu.:2020-10-17 18:56:44  
- Max.   :2021-03-31 23:59:08  
-    ended_at                  
- Min.   :2020-04-01 00:10:45  
- 1st Qu.:2020-07-12 21:13:10  
- Median :2020-08-26 18:45:42  
- Mean   :2020-09-08 20:49:17  
- 3rd Qu.:2020-10-17 19:15:42  
- Max.   :2021-04-06 11:00:11  
- start_station_name
- Length:3354306    
- Class :character  
- Mode  :character  
-              
- start_station_id  
- Length:3354306    
- Class :character  
- Mode  :character  
-         
- end_station_name  
- Length:3354306    
- Class :character  
- Mode  :character  
-               
- end_station_id    
- Length:3354306    
- Class :character  
- Mode  :character  
-             
-   start_lat    
- Min.   :41.64  
- 1st Qu.:41.88  
- Median :41.90  
- Mean   :41.90  
- 3rd Qu.:41.93  
- Max.   :42.07  
-   start_lng     
- Min.   :-87.78  
- 1st Qu.:-87.66  
- Median :-87.64  
- Mean   :-87.64  
- 3rd Qu.:-87.63  
- Max.   :-87.53  
-    end_lat     
- Min.   :41.54  
- 1st Qu.:41.88  
- Median :41.90  
- Mean   :41.91  
- 3rd Qu.:41.93  
- Max.   :42.08  
-    end_lng      
- Min.   :-88.07  
- 1st Qu.:-87.66  
- Median :-87.64  
- Mean   :-87.64  
- 3rd Qu.:-87.63  
- Max.   :-87.51  
- member_casual     
- Length:3354306    
- Class :character  
- Mode  :character  
-              
-      date           
- Min.   :2020-04-01  
- 1st Qu.:2020-07-12  
- Median :2020-08-26  
- Mean   :2020-09-08  
- 3rd Qu.:2020-10-17  
- Max.   :2021-03-31  
-    month          
- Length:3354306    
- Class :character  
- Mode  :character  
-           
-     day           
- Length:3354306    
- Class :character  
- Mode  :character  
-              
-     year          
- Length:3354306    
- Class :character  
- Mode  :character  
-              
- day_of_week       
- Length:3354306    
- Class :character  
- Mode  :character  
-               
-  year_month       
- Length:3354306    
- Class :character  
- Mode  :character  
-              
-   weekday         
- Length:3354306    
- Class :character  
- Mode  :character  
-                
-  start_hour       
- Length:3354306    
- Class :character  
- Mode  :character  
-                 
-  ride_time_m       
- Min.   :-29049.97  
- 1st Qu.:     7.97  
- Median :    14.62  
- Mean   :    26.32  
- 3rd Qu.:    26.72  
- Max.   : 58720.03  
- 
-###*Correction for negative values in ride time*:
+#### Result/Summary:
+
+ride_id          rideable_type        started_at                     ended_at                   start_station_name start_station_id  
+ Length:3489539     Length:3489539     Min.   :2020-04-01 00:00:30   Min.   :2020-04-01 00:10:45   Length:3489539     Length:3489539    
+ Class :character   Class :character   1st Qu.:2020-07-14 19:36:28   1st Qu.:2020-07-14 20:11:10   Class :character   Class :character  
+ Mode  :character   Mode  :character   Median :2020-08-29 14:47:30   Median :2020-08-29 15:18:24   Mode  :character   Mode  :character  
+                                       Mean   :2020-09-10 01:24:14   Mean   :2020-09-10 01:50:43                                        
+                                       3rd Qu.:2020-10-20 18:07:35   3rd Qu.:2020-10-20 18:21:47                                        
+                                       Max.   :2021-03-31 23:59:08   Max.   :2021-04-06 11:00:11                                        
+                                                                                                                                        
+ end_station_name   end_station_id       start_lat       start_lng         end_lat         end_lng       member_casual     
+ Length:3489539     Length:3489539     Min.   :41.64   Min.   :-87.87   Min.   :41.54   Min.   :-88.07   Length:3489539    
+ Class :character   Class :character   1st Qu.:41.88   1st Qu.:-87.66   1st Qu.:41.88   1st Qu.:-87.66   Class :character  
+ Mode  :character   Mode  :character   Median :41.90   Median :-87.64   Median :41.90   Median :-87.64   Mode  :character  
+                                       Mean   :41.90   Mean   :-87.64   Mean   :41.90   Mean   :-87.64                     
+                                       3rd Qu.:41.93   3rd Qu.:-87.63   3rd Qu.:41.93   3rd Qu.:-87.63                     
+                                       Max.   :42.08   Max.   :-87.52   Max.   :42.16   Max.   :-87.44                     
+                                                                        NA's   :4737    NA's   :4737                       
+  year_month          weekday           start_hour         ride_time_m       
+ Length:3489539     Length:3489539     Length:3489539     Min.   :-29049.97  
+ Class :character   Class :character   Class :character   1st Qu.:     7.88  
+ Mode  :character   Mode  :character   Mode  :character   Median :    14.52  
+                                                          Mean   :    26.48  
+                                                          3rd Qu.:    26.63  
+                                                          Max.   : 58720.03  
+                                                                             
+### *Correction for negative values in ride time/removal of outliers*:
 (will use 95% of data to remove outliers that are affecting results and causing negative values)
 
-```{r,correct for negative time values}
+```{r,ventiles}
 ventiles = quantile(bike_rides2$ride_time_m, seq(0, 1, by = 0.05))
 ventiles
 ```
-####Result:
-Ventiles-
-  0%            5% 
--29049.966667      3.166667 
-          10%           15% 
-     4.583333      5.750000 
-          20%           25% 
-     6.850000      7.966667 
-          30%           35% 
-     9.116667     10.333333 
-          40%           45% 
-    11.616667     13.033333 
-          50%           55% 
-    14.616667     16.383333 
-          60%           65% 
-    18.416667     20.750000 
-          70%           75% 
-    23.500000     26.716667 
-          80%           85% 
-    30.666667     36.466667 
-          90%           95% 
-    46.150000     73.250000 
-         100% 
- 58720.033333 
+#### Result:
 
- ###*Remove the outliers*:
+ 0%            5%           10%           15%           20%           25%           30%           35%           40% 
+-29049.966667      3.100000      4.516667      5.683333      6.783333      7.883333      9.033333     10.250000     11.533333 
+          45%           50%           55%           60%           65%           70%           75%           80%           85% 
+    12.950000     14.516667     16.283333     18.300000     20.650000     23.400000     26.633333     30.583333     36.400000 
+          90%           95%          100% 
+    46.100000     73.050000  58720.033333 
+
+ ###* *Remove the outliers to correct for negative values*:
  
 ``` {r, remove outliers,prep plots}
 fig <- function(width,height){options(repr.plot.width = width, repr.plot.height = height)}
@@ -413,21 +336,50 @@ filter(ride_time_m < as.numeric(ventiles['95%']))
 print(paste("Removed", nrow(bike_rides2) - nrow(bike_rides3), "rows as outliers" ))
 ```
 
-####Result:
+#### Result:
+
 [1] "Removed 350111 rows as outliers"
+
+###* *Checking & Saving*:
+
+#### Reviewing table dimensions
+### Saving as csv for export to Tableau for additional analysis & visualization
 
 ```{r,check dimensions,save}
 dim(bike_rides3)
+
 head(bike_rides3)
+
 bike_rides3%>%
 write.csv("bike_rides3.csv")
 ```
-###*Calculations/Analysis*:
-```{r,member v casual}
-###Calculate the number of casual versus annual members for comparision
+#### Result:
+
+ ride_id rideable_type          started_at            ended_at         start_station_name start_station_id end_station_name
+1 E19E6F1B8D4C42ED electric_bike 2021-01-23 16:14:19 2021-01-23 16:24:44 California Ave & Cortez St            17660                 
+2 DC88F20C2C55F27F electric_bike 2021-01-27 18:43:08 2021-01-27 18:47:12 California Ave & Cortez St            17660                 
+3 4FA453A75AE377DB electric_bike 2021-01-07 13:31:13 2021-01-07 13:42:55 California Ave & Cortez St            17660                 
+4 5D8969F88C773979 electric_bike 2021-01-09 14:24:07 2021-01-09 15:17:54 California Ave & Cortez St            17660                 
+5 09275CC10F854E9E electric_bike 2021-01-04 05:05:04 2021-01-04 05:10:39 California Ave & Cortez St            17660                 
+6 DF7A32A217AEFB14 electric_bike 2021-01-14 15:07:00 2021-01-14 15:13:40 California Ave & Cortez St            17660                 
+  end_station_id start_lat start_lng end_lat end_lng member_casual      year_month weekday start_hour ride_time_m
+1                 41.90034 -87.69674   41.89  -87.72        member 2021 - 01 (Jan) 6 - Sat         16   10.416667
+2                 41.90033 -87.69671   41.90  -87.69        member 2021 - 01 (Jan) 3 - Wed         18    4.066667
+3                 41.90040 -87.69666   41.92  -87.69        member 2021 - 01 (Jan) 4 - Thu         13   11.700000
+4                 41.90041 -87.69676   41.94  -87.71        casual 2021 - 01 (Jan) 6 - Sat         15   53.783333
+5                 41.90039 -87.69676   41.90  -87.71        member 2021 - 01 (Jan) 1 - Mon         05    5.583333
+6                 41.90039 -87.69673   41.91  -87.70        member 2021 - 01 (Jan) 4 - Thu         15    6.666667
+
+
+### *Calculations/Analysis*:
+
+### Calculate the number of casual versus annual members for comparision
+
+```{r, member vs. casual count}
 bike_rides3 %>% group_by(member_casual) %>% summarise(count = length(ride_id), '%' = (length(ride_id) / nrow(bike_rides3)) * 100)
 ```
 ####Result:
+
 A tibble:2 × 3
 member_casual
 <chr>
@@ -438,12 +390,16 @@ count
 casual	1228664	39.13656	
 member	1910764	60.86344	
 
-```
-  {R,group}
+###* *Group for Analysis*:
+ 
+#### Quarters:
+  
+```{R,group}
 bike_rides3 %>% group_by(member_casual) %>% 
 summarise(mean = mean(ride_time_m),'first_quarter' = as.numeric(quantile(ride_time_m, .25)), 'median' = median(ride_time_m), 'third_quarter' = as.numeric(quantile(ride_time_m, .75)), 'IR' = third_quarter - first_quarter)
 ```
-####Result:
+#### Result:
+  
 A tibble:2 × 6
 member_casual
 <chr>
@@ -456,11 +412,15 @@ median
 casual	23.67852	11.3	19.16667	
 member	15.48345	7.3	12.18333	
 2 rows | 1-4 of 6 columns
+  
+#### Count of bike typer per user type:
+  
 ```{R, group}
 bike_rides3 %>% group_by(rideable_type) %>% summarise(count = length(ride_id),'%' = (length(ride_id) / nrow(bike_rides3)) * 100,'members_p' = (sum(member_casual == "member") / length(ride_id)) * 100,'casual_p' = (sum(member_casual == "casual") / length(ride_id)) * 100, 'member_casual_perc_difer' = members_p - casual_p)
 ```
 
-####Result:
+#### Result:
+  
 A tibble:3 × 6
 rideable_type
 <chr>
@@ -474,11 +434,12 @@ classic_bike	294441	9.37881	78.26356
 docked_bike	2291710	72.99769	58.74805	
 electric_bike	553277	17.62350	60.36560	
   
-##*Visualization*
- ##Graph of total rides per day of the week
-```
-  {R, Weekday Graph}
-  bike_rides3 %>%   
+## *Visualization*
+  
+###* *Graph of Total Rides per Day of the Week*
+  
+```{R, Weekday Graph}
+bike_rides3 %>%   
 group_by(member_casual, weekday) %>% 
 summarise(number_of_rides = n() ) %>% 
 arrange(member_casual, weekday) %>% 
@@ -486,25 +447,27 @@ ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(p
 labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 'Member vs Casual') +
 + scale_y_continuous(breaks = c(250000, 400000, 550000), labels = c("250K", "400K", "550K"))
 ```
+  
   ![image](https://user-images.githubusercontent.com/96959280/154780166-29a9f285-d43c-43a3-91f5-870f708a48c3.png)
 
-##Graph of Rides per Month (Count)
+###* *Graph of Rides per Month(Count)*
+  
+  ```{R, rides per Month}
+bike_rides3 %>%   
+group_by(member_casual, year_month) %>%  
+summarise(total_rides = n(),`ride_time_m` = mean(ride_time_m)) %>% 
+arrange(member_casual) %>% 
+ggplot(aes(x=year_month, y=total_rides, fill = member_casual)) + geom_col(position = "dodge") + 
+labs(x= "Month", y= "Total Number of Rides", title = "Rides per Month", fill = "Member vs Casual") + 
+scale_y_continuous(breaks = c(100000, 200000, 300000, 400000), labels = c("100K", "200K", "300K", "400K")) + theme(axis.text.x =    element_text(angle = 45))
   ```
-  {R, rides per Month}
-  bike_rides3 %>%   
-  group_by(member_casual, year_month) %>%  
-  summarise(total_rides = n(),`ride_time_m` = mean(ride_time_m)) %>% 
-  arrange(member_casual) %>% 
-  ggplot(aes(x=year_month, y=total_rides, fill = member_casual)) + geom_col(position = "dodge") + 
-  labs(x= "Month", y= "Total Number of Rides", title = "Rides per Month", fill = "Member vs Casual") + 
-  scale_y_continuous(breaks = c(100000, 200000, 300000, 400000), labels = c("100K", "200K", "300K", "400K")) + theme(axis.text.x = element_text(angle = 45))
-  ```
+  
   ![image](https://user-images.githubusercontent.com/96959280/154781293-8ec36539-a129-4f7d-aab8-6c1a5343dbc1.png)
 
-##Average length of rides per month (member vs. casual)
-  ```
-  {R, Member vs. Casual rides/month}
-  bike_rides3 %>%  #Average ride length by customer type and month
+###* *Average length of rides per Month (member vs. casual)*
+  
+  ```{R, Member vs. Casual Rides/Month}
+  bike_rides3 %>%  
   group_by(member_casual, year_month) %>% 
   summarise(average_ride_length = mean(ride_time_m)) %>% 
   ggplot(aes(x = year_month, y = average_ride_length, fill = member_casual))+ 
@@ -512,12 +475,13 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   labs (x="Month", y = "Average Ride Length(min)", title = "Average Ride Time by Customer Type and Month", 
         fill = "Member_Casual") + theme(axis.text.x = element_text(angle = 45))
   ```
+  
 ![image](https://user-images.githubusercontent.com/96959280/154797088-bd4900cc-9b59-4f7a-8686-e8a530427651.png)
 
- ##Average length of rides per week (member vs. casual)
-  ```
-  {R, Member vs. Casual- rides/week}
-  bike_rides3 %>%   #Average length by Customer Type and Day of Week
+ ### *Average length of rides per Week (Member vs. Casual)*
+  
+  ```{R, Member vs. Casual- Rides/Week}
+  bike_rides3 %>%   
   group_by(member_casual, weekday) %>% 
   summarise(average_ride_length = mean(ride_time_m)) %>% 
   ggplot(aes(x=weekday, y = average_ride_length, fill = member_casual))+
@@ -525,22 +489,25 @@ labs(x= 'Day of Week', y='Total Number of Rides', title='Rides per Day', fill = 
   title = "Average Ride Time per Type and Day of Week", 
   fill = "Member vs Casual")
   ```
+  
   ![image](https://user-images.githubusercontent.com/96959280/154797456-c7ed4728-3138-43a9-98b0-2611e63a7931.png)
 
-  ##Bike Type vs. Member Type
-  ```
-  {R, rideable vs. member/casual}
+  ###* *Bike Type vs. Member Type*
+  
+  ```{R, Rideable vs. Member/Casual}
 bike_rides3 %>%    
-  ggplot(aes(x = rideable_type, fill = member_casual)) + geom_bar(position = "dodge") + 
-  labs(x= 'Bike Type', y='Number of Rentals', title='Bike Type', fill = 'Member vs. Casual') +
-  scale_y_continuous(breaks = c(500000, 1000000, 1500000), labels = c("500K", "1Mil", "1.5Mil"))
-  fill = "Member_Casual") + theme(axis.text.x = element_text(angle = 45))
+ggplot(aes(x = rideable_type, fill = member_casual)) + geom_bar(position = "dodge") + 
+labs(x= 'Bike Type', y='Number of Rentals', title='Bike Type', fill = 'Member vs. Casual') +
+scale_y_continuous(breaks = c(500000, 1000000, 1500000), labels = c("500K", "1Mil", "1.5Mil"))
+fill = "Member_Casual") + theme(axis.text.x = element_text(angle = 45))
   ```
+  
   ![image](https://user-images.githubusercontent.com/96959280/154797793-2ee7d19e-7c3e-4d95-ae24-c22caa400034.png)
   
- ```
-  ##*Determining Top Stations per Member Type* (with removal of cells without station names)
-{R, top stations}
+ ###* *Determining Top Stations per Member Type* (with removal of cells without station names)
+
+```{R, top stations}
+  
 all_stations <- bind_rows(data.frame("stations" = bike_rides3$start_station_name, "member_casual" = bike_rides3$member_casual), data.frame("stations" = bike_rides3$end_station_name, "member_casual" = bike_rides3$member_casual))
                   
 all_stations_v2 <- all_stations[!(all_stations$stations == "" | is.na(all_stations$stations)),]
@@ -556,14 +523,19 @@ group_by(stations) %>%
 summarise(station_count = n()) %>% 
 arrange(desc(station_count)) %>% 
 head(n=10)
+```
+  
 ###* *Top Ten Stations for Annual Members*:
+
+```{R, Top 10 Stations_member}  
 ggplot(data = top_10_station_member) +  geom_col(aes(x = reorder(stations, station_count), y = station_count), fill= "#7570B3") + labs(title = "Top 10 Used Stations by Members", y = "Number of Rides", x = "") + scale_y_continuous(labels = scales::comma) + coord_flip() + theme_minimal()
  ```
+  
 ![image](https://user-images.githubusercontent.com/96959280/154821423-9da56634-5e8c-4320-85f3-d819dc62f86b.png)
   
 ###* *Top Ten Stations for Casual Riders*:
-```
-{R,Casual top ten}
+
+```{R,Casual top ten}
   
 bike_rides3 %>%
 group_by(start_station_name,end_station_name) %>%
@@ -571,32 +543,35 @@ filter(start_station_name!="NULL") %>%
 summarize(rides = n()) %>% ungroup %>% top_n(10)
   
 bike_rides3 %>%
-  group_by(start_station_name,end_station_name) %>%
-    filter(start_station_name!="NULL") %>%
-    summarize(rides = n()) %>% ungroup %>% top_n(20) 
+group_by(start_station_name,end_station_name) %>%
+filter(start_station_name!="NULL") %>%
+summarize(rides = n()) %>% ungroup %>% top_n(20) 
   
 ggplot(data = top_10_station_casual) +
 geom_col(aes(x = reorder(stations, station_count), y = station_count), fill = "#E6AB02") + labs(title = "Top 10 Used Stations by Casual Riders", x = "", y = "Number of Rides") + scale_y_continuous(labels = scales::comma) +coord_flip() +theme_minimal() 
 ```
 
  ![image](https://user-images.githubusercontent.com/96959280/154821961-20d51325-6811-4763-bb73-876a0fa1397a.png)
+  
 ###* *Summary Info*:
-```
-{R, Summary}
+
+  ```{R, Summary}
 basic_stats <- bike_rides3 %>%
-  summarize(average_ride_length = duration(mean(ride_time_m)), 
-  max_ride_length = duration(max(ride_time_m)), 
-  min_ride_length = duration(min(ride_time_m)), 
- median_ride_length = duration(median(ride_time_m)))
+summarize(average_ride_length = duration(mean(ride_time_m)), 
+max_ride_length = duration(max(ride_time_m)), 
+min_ride_length = duration(min(ride_time_m)), 
+median_ride_length = duration(median(ride_time_m)))
  ```
+  
  # A tibble: 1 × 4
   average_ride_length max_ride_length                   min_ride_length   median_ride_length
   <Duration>          <Duration>                        <Duration>        <Duration>        
-1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s        
-```
-  {R, create map}
+1 18.6907169926104s   73.0333333333333s (~1.22 minutes) 3.11666666666667s 14.5166666666667s   
+    
+###* *Map Creation*:
       
- ##plotting stations
+ #### Getting Map of Chicago/Plotting Count of Rides per Station
+    
  ```{R, plot station locations}
    
 chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, right = -87.2713, top = 42.0677), zoom = 11)
@@ -604,22 +579,25 @@ chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, right = -87
 chicago_map <- ggmap(chicago)   
                
 station.info <- bike_rides3 %>% group_by(start_station_id) %>% summarise(lat=as.numeric(start_lat), long=as.numeric(start_lng),name=start_station_name, n.trips=n())
-    
+   
 str(station.info)
- 
-###* *Map of Station Locations*:
+    
+ ```
+ ![image](https://user-images.githubusercontent.com/96959280/155408587-9537b1f2-7ab5-4051-a5a1-90516725d409.png)    
+  
+###* *Map of Station Locations/Concentration of High Use Stations*:
 
+ ```{R, map concentrated station use areas}
+    
 chicago_map + geom_point(data=station.info, aes(x=long,y=lat), color='red',size=2)+
   theme(axis.ticks = element_blank(), axis.text = element_blank())+ xlab('')+ylab('')
-    
-  ![image](https://user-images.githubusercontent.com/96959280/155408587-9537b1f2-7ab5-4051-a5a1-90516725d409.png) 
     
 chicago_map + geom_point(data=station.info,aes(x=long,y=lat,color=n.trips),size=3,alpha=0.75)+
 scale_colour_gradient(high="red",low='green')+ 
 xlab('')+ylab('')   
-
+```
+![image](https://user-images.githubusercontent.com/96959280/155409684-639d4d33-0268-47fd-a006-f490af7c6381.png)  
  
-![image](https://user-images.githubusercontent.com/96959280/155409684-639d4d33-0268-47fd-a006-f490af7c6381.png)    
 
     
  
