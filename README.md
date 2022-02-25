@@ -1,8 +1,11 @@
 # Cyclistic_Bike_Share
----
+
+
+presentation link: https://docs.google.com/presentation/d/1EEyOvPXX10qYJYFna0sTIu072-DMpbDYO9I9Hd9_x8A/edit?usp=sharing---
+
 title: "Bike_Share_Capstone_Project"
 author: "Alyssa Gessleman"
-date: "2/18/2022"
+date: "2/25/2022"
 ---
 # **Project Information**:
 [https://www.coursera.org/learn/google-data-analytics-capstone/supplement/7PGIT/case-study-1-how-does-a-bike-share-navigate-speedy-success#:~:text=Google%20Data%20Analytics%20Capstone%3A%20Complete%20a%20Case%20Study]
