@@ -15,9 +15,9 @@
 * *12 files opened and save in csv format to desktop*:
    Capstone_Project_Data_Analytics
   
-* *12 files imported to RStudio*
+* *12 files imported to R.app*
 
-## **Set up environment in RStudio**
+## **Set up environment in R.app**
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -128,14 +128,16 @@ View(`12`)
 ```{r, combine into one data frame}
 bike_rides <- rbind(`1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`10`,`11`,`12`)
 ```
-###check dimensions of new data frame to verify that data combined successfully
+###Check dimensions of new data frame to verify that data combined successfully
 
 ```{r,view combined data frame}
 dim(bike_rides)
 ```   
 #### *Result* [1] 3489748      13
+
+##Begin Cleaning:
  
-###remove_empty - check for empty rows/columns:
+###Remove_empty - check for empty rows/columns:
 ```{r,check for empty rows/columns}
 bike_rides <- janitor::remove_empty(bike_rides, which = c("cols"))
 bike_rides <- janitor::remove_empty(bike_rides, which = c("rows"))
